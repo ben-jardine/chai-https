@@ -1,26 +1,59 @@
-# name: Daily API Tests
-# 'on':
-#   schedule:
-#     - cron: 0 10 * * 1-5
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
-#     env:
-#       API_URL: 'https://pokeapi.co/api/v2'
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-#       - name: Install dependencies
-#         run: npm ci
-#       - name: Run ESLint
-#         run: npx eslint --quiet
-#       - name: Run tests and generate report
-#         env:
-#           TEST_REPORT_PATH: report.xml
-#         run: |
-#           npm test -- --reporter=mocha-junit-reporter --reporter-options mochaFile=./test-results.xml
-#       - name: Upload test report as artifact
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: Test Report
-#           path: ./test-results.xml
+name: Daily API Tests
+'on':
+  - push
+  - workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      API_URL: 'https://pokeapi.co/api/v2'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm ci
+      - name: Run ESLint
+        run: npx eslint --quiet
+      - name: Run tests and generate report
+        env:
+          TEST_REPORT_PATH: report.xml
+        run: |
+          npm test -- --reporter=mocha-junit-reporter --reporter-options mochaFile=./test-results.xml
+      - name: Upload test report as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Report
+          path: ./test-results.xml
+      - name: Notify on Slack
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: "C058GP7SQA0" #wdio-messaging-test
+          payload: |
+           {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "plain_text",
+                  "text": ":gear: API suite result: ${{ job.status }}",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View all results",
+                      "emoji": true
+                    },
+                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+                ]
+              }
+            ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.WDIO_SLACKBOT_TOKEN }}  
