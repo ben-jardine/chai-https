@@ -4,8 +4,7 @@
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": ":gear: API suite result: ${{ job.status }}",
-                "emoji": true
+                "text": ":gear: API suite result: ${{ job.status }}"
             }
         },
         {
@@ -15,8 +14,7 @@
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "View all results",
-                        "emoji": true
+                        "text": "View all results"
                     },
                     "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
                 }
