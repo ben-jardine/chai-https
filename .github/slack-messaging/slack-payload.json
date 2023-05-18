@@ -3,8 +3,8 @@
         {
             "type": "section",
             "text": {
-                "type": "mrkdwn",
-                "text": "Hello, Slack!"
+                "type": "plain_text",
+                "text": ":gear: API suite result: ${{ job.status }}"
             }
         }
     ]
