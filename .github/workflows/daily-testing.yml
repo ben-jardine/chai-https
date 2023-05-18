@@ -28,32 +28,6 @@ jobs:
         uses: slackapi/slack-github-action@v1.23.0
         with:
           channel-id: "C058GP7SQA0" #wdio-messaging-test
-          payload: |
-           {
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "plain_text",
-                  "text": ":gear: API suite result: ${{ job.status }}",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "actions",
-                "elements": [
-                  {
-                    "type": "button",
-                    "text": {
-                      "type": "plain_text",
-                      "text": "View all results",
-                      "emoji": true
-                    },
-                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                  }
-                ]
-              }
-            ]
-            }
+          payload-file-path: ./slack-messaging/slack-payload.json
         env:
           SLACK_BOT_TOKEN: ${{ secrets.WDIO_SLACKBOT_TOKEN }}  
