@@ -8,17 +8,11 @@
             }
         },
         {
-            "type": "actions",
-            "elements": [
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "View all results"
-                    },
-                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                }
-            ]
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": ":gear: API suite result: ${{ job.status }}"
+            }
         }
     ]
 }
